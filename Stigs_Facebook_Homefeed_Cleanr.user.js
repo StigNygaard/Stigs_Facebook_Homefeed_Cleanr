@@ -3,7 +3,7 @@
 // @namespace   dk.rockland.userscript.facebook.cleanr
 // @description Cleaning up the homefeed on Facebook. Removes or highlights Suggested, sponsored and paid content in the homefeed.
 // @match       *://*.facebook.com/*
-// @version     2017.11.05.0
+// @version     2017.11.05.1
 // @author      Stig Nygaard, http://www.rockland.dk
 // @homepageURL http://www.rockland.dk/userscript/facebook/cleanr/
 // @supportURL  http://www.rockland.dk/userscript/facebook/cleanr/
@@ -11,7 +11,7 @@
 // @grant       GM_deleteValue
 // @grant       GM_registerMenuCommand
 // @grant       GM_getResourceURL
-// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=227517
+// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=228216
 // @resource    imgSettingsGCTM https://greasyfork.org/system/screenshots/screenshots/000/008/955/original/FBCleanrGCTM.png
 // @resource    imgSettingsFFGM https://greasyfork.org/system/screenshots/screenshots/000/008/956/original/FBCleanrFFGM.png
 // @noframes
@@ -23,7 +23,7 @@
  *      posts in the in the homefeed, like Suggested Posts and Sponsored content.
  *
  *      https://greasyfork.org/scripts/20884-stig-s-facebook-homefeed-cleanr
- *      https://github.com/StigNygaard/xxxxxxxxxxxxxxxxxxxxxxxxxxx
+ *      https://github.com/StigNygaard/Stigs_Facebook_Homefeed_Cleanr
  *
  *      Should work with all popular browsers and userscript managers. Compatibility with
  *      the new/upcoming Greasemonkey 4 WebExtension is done with the help of GM Common API:
@@ -56,7 +56,7 @@
 
 // CHANGELOG - The most important updates/versions:
 var changelog = [
-    {version: '2017.11.05.x', description: 'Greasemonkey 4 compatibility. New configuration menu/dialog. Bug fixes. Moving development to GitHub repository.'},
+    {version: '2017.11.05.1', description: 'Greasemonkey 4 compatibility. New configuration menu/dialog. Bug fixes. Moving development to GitHub repository.'},
     {version: '2016.10.18.0', description: 'Sepia/yellowish highlight filter (Works best with modern browsers) plus some fixes and extra configuration options.'},
     {version: '2016.06.24.1', description: '1st release. English Facebook supported.'}
 ]; // TODO: Further configuration options to tailor your homefeed. Danish and mutiple language support.
@@ -343,9 +343,7 @@ var cleanr = cleanr || {
         }
     },
     runOnce: function() {
-
-        GMC.setLocalStorageValue('infoShown',''); // TEMP To always show run-once info!!!
-
+        //GMC.setLocalStorageValue('infoShown',''); // To always show run-once info!!!
         if (!GMC.getLocalStorageValue('infoShown',false)) {
             let infobox = '<div id="infobox" style="position:fixed;left:0;right:0;top:5em;z-index:3000009;margin-left:auto;margin-right:auto;min-height:8em;width:40%;background-color:#fff;color:#111;border:3px rgb(66,103,178) solid;border-radius:5px;display:none;padding:1em"><em style="color:rgb(66,103,178)"><b>Stig\'s Facebook Homefeed Cleanr information</b> - This is only shown once...</em><div style="padding:1em 0 0 0"></div></div>';
             document.body.insertAdjacentHTML('beforeend', infobox);
