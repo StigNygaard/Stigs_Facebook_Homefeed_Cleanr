@@ -3,7 +3,7 @@
 // @namespace   dk.rockland.userscript.facebook.cleanr
 // @description Cleaning up the homefeed on Facebook. Removes or highlights Suggested, sponsored and paid content in the homefeed.
 // @match       *://*.facebook.com/*
-// @version     2017.11.05.1
+// @version     2017.11.05.2
 // @author      Stig Nygaard, http://www.rockland.dk
 // @homepageURL http://www.rockland.dk/userscript/facebook/cleanr/
 // @supportURL  http://www.rockland.dk/userscript/facebook/cleanr/
@@ -56,7 +56,7 @@
 
 // CHANGELOG - The most important updates/versions:
 var changelog = [
-    {version: '2017.11.05.1', description: 'Greasemonkey 4 compatibility. New configuration menu/dialog. Bug fixes. Moving development to GitHub repository.'},
+    {version: '2017.11.05.2', description: 'Greasemonkey 4 compatibility. New configuration menu/dialog. Bug fixes. Moving development to GitHub repository.'},
     {version: '2016.10.18.0', description: 'Sepia/yellowish highlight filter (Works best with modern browsers) plus some fixes and extra configuration options.'},
     {version: '2016.06.24.1', description: '1st release. English Facebook supported.'}
 ]; // TODO: Further configuration options to tailor your homefeed. Danish and mutiple language support.
@@ -221,7 +221,7 @@ var cleanr = cleanr || {
         document.forms['cleanrsettings'].querySelector('input:checked:enabled').focus();
     },
     loadSettings: function() {
-        if (GM_getValue) { // TEMP! Moving old values to Local Storage
+        if (typeof GM_getValue === 'function') { // TEMP! Moving old values to Local Storage
             if (GM_getValue('debug','') !== '') {
                 GMC.setLocalStorageValue('debug', GM_getValue('debug',''));
                 GM_deleteValue('debug');
