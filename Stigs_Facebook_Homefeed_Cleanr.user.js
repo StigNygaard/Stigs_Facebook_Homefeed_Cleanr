@@ -3,7 +3,7 @@
 // @namespace   dk.rockland.userscript.facebook.cleanr
 // @description Cleaning up the homefeed on Facebook. Removes or highlights Suggested, sponsored and paid content in the homefeed.
 // @match       *://*.facebook.com/*
-// @version     2017.11.05.2
+// @version     2017.11.12.0
 // @author      Stig Nygaard, http://www.rockland.dk
 // @homepageURL http://www.rockland.dk/userscript/facebook/cleanr/
 // @supportURL  http://www.rockland.dk/userscript/facebook/cleanr/
@@ -11,7 +11,7 @@
 // @grant       GM_deleteValue
 // @grant       GM_registerMenuCommand
 // @grant       GM_getResourceURL
-// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=228216
+// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=229909
 // @resource    imgSettingsGCTM https://greasyfork.org/system/screenshots/screenshots/000/008/955/original/FBCleanrGCTM.png
 // @resource    imgSettingsFFGM https://greasyfork.org/system/screenshots/screenshots/000/008/956/original/FBCleanrFFGM.png
 // @noframes
@@ -56,7 +56,7 @@
 
 // CHANGELOG - The most important updates/versions:
 var changelog = [
-    {version: '2017.11.05.2', description: 'Greasemonkey 4 compatibility. New configuration menu/dialog. Bug fixes. Moving development to GitHub repository.'},
+    {version: '2017.11.05.2', description: 'Greasemonkey 4 compatibility. New Settings menu/dialog. Bug fixes. Moving development to GitHub repository.'},
     {version: '2016.10.18.0', description: 'Sepia/yellowish highlight filter (Works best with modern browsers) plus some fixes and extra configuration options.'},
     {version: '2016.06.24.1', description: '1st release. English Facebook supported.'}
 ]; // TODO: Further configuration options to tailor your homefeed. Danish and mutiple language support.
