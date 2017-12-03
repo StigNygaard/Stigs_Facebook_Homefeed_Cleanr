@@ -3,7 +3,7 @@
 // @namespace   dk.rockland.userscript.facebook.cleanr
 // @description Cleaning up the homefeed on Facebook. Removes or highlights Suggested, sponsored and paid content in the homefeed.
 // @match       *://*.facebook.com/*
-// @version     2017.11.12.0
+// @version     2017.12.03.0
 // @author      Stig Nygaard, http://www.rockland.dk
 // @homepageURL http://www.rockland.dk/userscript/facebook/cleanr/
 // @supportURL  http://www.rockland.dk/userscript/facebook/cleanr/
@@ -11,7 +11,7 @@
 // @grant       GM_deleteValue
 // @grant       GM_registerMenuCommand
 // @grant       GM_getResourceURL
-// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=229909
+// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=234607
 // @resource    imgSettingsGCTM https://greasyfork.org/system/screenshots/screenshots/000/008/955/original/FBCleanrGCTM.png
 // @resource    imgSettingsFFGM https://greasyfork.org/system/screenshots/screenshots/000/008/956/original/FBCleanrFFGM.png
 // @noframes
@@ -25,8 +25,8 @@
  *      https://greasyfork.org/scripts/20884-stig-s-facebook-homefeed-cleanr
  *      https://github.com/StigNygaard/Stigs_Facebook_Homefeed_Cleanr
  *
- *      Should work with all popular browsers and userscript managers. Compatibility with
- *      the new/upcoming Greasemonkey 4 WebExtension is done with the help of GM Common API:
+ *      Should work with all popular browsers and userscript managers. Compatibility with the new
+ *      Greasemonkey 4 WebExtension and Firefox 57+ is done with the help of GMCommonAPI library:
  *
  *      https://github.com/StigNygaard/GMCommonAPI.js
  *      https://greasyfork.org/scripts/34527-gmcommonapi-js
@@ -85,8 +85,8 @@ function log(s, info) {
 }
 var cleanr = cleanr || {
     list: [
-        {language: 'English', filter: ['Suggested Post', 'Suggested video', 'Suggested Pages', 'Sponsored', ' Paid ']},
-        // {language: 'English', filter: ['Suggested Post', 'Suggested video', 'Suggested Pages', /* 'replied to a comment on this', */ 'Sponsored', ' Paid ', ' liked this.', ' reacted to this.', ' commented on this.', 'Like Page', "s Birthday", "s birthday!"]}, // my personnal settings // 's Birthday
+        {language: 'English', filter: ['Suggested Post', 'Suggested video', 'Suggested Pages', 'Page stories you may like', 'Sponsored', ' Paid ']},
+        // {language: 'English', filter: ['Suggested Post', 'Suggested video', 'Suggested Pages', 'Page stories you may like', /* 'replied to a comment on this', */ 'Sponsored', ' Paid ', ' liked this.', ' reacted to this.', ' commented on this.', 'Like Page', "s Birthday", "s birthday!"]}, // my personnal settings // 's Birthday
         {language: 'Dansk', filter: ['Foreslået opslag', 'Sponsoreret']}
     ],
     config: {
@@ -345,7 +345,7 @@ var cleanr = cleanr || {
     runOnce: function() {
         //GMC.setLocalStorageValue('infoShown',''); // To always show run-once info!!!
         if (!GMC.getLocalStorageValue('infoShown',false)) {
-            let infobox = '<div id="infobox" style="position:fixed;left:0;right:0;top:5em;z-index:3000009;margin-left:auto;margin-right:auto;min-height:8em;width:40%;background-color:#fff;color:#111;border:3px rgb(66,103,178) solid;border-radius:5px;display:none;padding:1em"><em style="color:rgb(66,103,178)"><b>Stig\'s Facebook Homefeed Cleanr information</b> - This is only shown once...</em><div style="padding:1em 0 0 0"></div></div>';
+            let infobox = '<div id="infobox" style="position:fixed;left:0;right:0;top:5em;z-index:3000009;margin-left:auto;margin-right:auto;min-height:8em;width:40%;background-color:#fff;color:#111;border:3px rgb(66,103,178) solid;border-radius:5px;display:none;padding:1em"><em style="color:rgb(66,103,178)"><b>Stig\'s Facebook Homefeed Cleanr information</b> - This should only be shown once or twice...</em><div style="padding:1em 0 0 0"></div></div>';
             document.body.insertAdjacentHTML('beforeend', infobox);
             document.getElementById('infobox').addEventListener('click', function () {
                 this.style.display = 'none';
@@ -359,7 +359,7 @@ var cleanr = cleanr || {
             }, {once: true});
             let content = document.querySelector('div#infobox div');
             let info = '<p>Using an userscript-managers like <em>Tampermonkey</em>, you can access a <b>settings dialog</b> for <em>Facebook Homefeed Cleanr</em> via a dropdown menu on the managers icon in the browser toolbar.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsGCTM')+'" />'
-                + '<p>In <em>Firefox</em> you can also access Facebook Homefeed Cleanr\'s <b>settings dialog</b> via the webpage\'s <em>context-menu</em> (right-click on the page).</p><p>If you are using <em>Greasemonkey</em>, the right-click context menu will be the <em>only way</em> to access the settings dialog from Greasemonkey <em>version 4</em>, which is expected to be released in primo/medio November...</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsFFGM')+'" />';
+                + '<p>In <em>Firefox</em> you can also access Facebook Homefeed Cleanr\'s <b>settings dialog</b> via the webpage\'s <em>context-menu</em> (right-click on the page).</p><p>If you are using <em>Greasemonkey 4</em>, the right-click context menu is the <em>only way</em> to access the settings dialog.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsFFGM')+'" />';
             content.insertAdjacentHTML('beforeend', info);
             document.getElementById('infobox').style.display = 'block';
             GMC.setLocalStorageValue('infoShown',GMC.info.script.version.replace(/\./g,'').substring(0,8));
