@@ -3,7 +3,7 @@
 // @namespace   dk.rockland.userscript.facebook.cleanr
 // @description Cleaning up the homefeed on Facebook. Removes or highlights Suggested, sponsored and paid content in the homefeed.
 // @match       *://*.facebook.com/*
-// @version     2017.12.07.1
+// @version     2017.12.07.3
 // @author      Stig Nygaard, http://www.rockland.dk
 // @homepageURL http://www.rockland.dk/userscript/facebook/cleanr/
 // @supportURL  http://www.rockland.dk/userscript/facebook/cleanr/
@@ -11,7 +11,7 @@
 // @grant       GM_deleteValue
 // @grant       GM_registerMenuCommand
 // @grant       GM_getResourceURL
-// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=229909
+// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=235553
 // @resource    imgSettingsGCTM https://greasyfork.org/system/screenshots/screenshots/000/008/955/original/FBCleanrGCTM.png
 // @resource    imgSettingsFFGM https://greasyfork.org/system/screenshots/screenshots/000/008/956/original/FBCleanrFFGM.png
 // @noframes
