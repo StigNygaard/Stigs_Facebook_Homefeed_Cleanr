@@ -3,7 +3,7 @@
 // @namespace   dk.rockland.userscript.facebook.cleanr
 // @description Cleaning up the homefeed on Facebook. Removes or highlights Suggested, sponsored and paid content in the homefeed.
 // @match       *://*.facebook.com/*
-// @version     2017.12.03.0
+// @version     2017.12.07.1
 // @author      Stig Nygaard, http://www.rockland.dk
 // @homepageURL http://www.rockland.dk/userscript/facebook/cleanr/
 // @supportURL  http://www.rockland.dk/userscript/facebook/cleanr/
@@ -11,7 +11,7 @@
 // @grant       GM_deleteValue
 // @grant       GM_registerMenuCommand
 // @grant       GM_getResourceURL
-// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=234607
+// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=229909
 // @resource    imgSettingsGCTM https://greasyfork.org/system/screenshots/screenshots/000/008/955/original/FBCleanrGCTM.png
 // @resource    imgSettingsFFGM https://greasyfork.org/system/screenshots/screenshots/000/008/956/original/FBCleanrFFGM.png
 // @noframes
@@ -56,6 +56,7 @@
 
 // CHANGELOG - The most important updates/versions:
 var changelog = [
+    {version: '2017.12.07.1', description: 'Reverting to an older version of GMCommonAPI while investigating an error when running in Google Chrome.'},
     {version: '2017.11.05.2', description: 'Greasemonkey 4 compatibility. New Settings menu/dialog. Bug fixes. Moving development to GitHub repository.'},
     {version: '2016.10.18.0', description: 'Sepia/yellowish highlight filter (Works best with modern browsers) plus some fixes and extra configuration options.'},
     {version: '2016.06.24.1', description: '1st release. English Facebook supported.'}
@@ -86,7 +87,7 @@ function log(s, info) {
 var cleanr = cleanr || {
     list: [
         {language: 'English', filter: ['Suggested Post', 'Suggested video', 'Suggested Pages', 'Page stories you may like', 'Sponsored', ' Paid ']},
-        // {language: 'English', filter: ['Suggested Post', 'Suggested video', 'Suggested Pages', 'Page stories you may like', /* 'replied to a comment on this', */ 'Sponsored', ' Paid ', ' liked this.', ' reacted to this.', ' commented on this.', 'Like Page', "s Birthday", "s birthday!"]}, // my personnal settings // 's Birthday
+        // {language: 'English', filter: ['Suggested Post', 'Suggested video', 'Suggested Pages', 'Page stories you may like', /* 'replied to a comment on this', ' shared a memory ', */ 'Sponsored', ' Paid ', ' liked this.', ' reacted to this.', ' commented on this.', 'Like Page', "s Birthday", "s birthday!"]}, // my personnal settings // 's Birthday
         {language: 'Dansk', filter: ['Foreslået opslag', 'Sponsoreret']}
     ],
     config: {
@@ -143,13 +144,14 @@ var cleanr = cleanr || {
     },
     configure: function() {
         var lan = cleanr.list[0].language; // Default to English
+        var i = 0;
 
         // *** Language detection currently NOT working: ***
         var languageselection = document.querySelector('._2cpb > div.fsm.fwn.fcg');
         if (languageselection) {
             languageselection = languageselection.textContent;
             log('languageselection=[' + languageselection + ']');
-            for (var i = 0; i < cleanr.list.length; i++) {
+            for (i = 0; i < cleanr.list.length; i++) {
                 if (languageselection.indexOf(cleanr.list[i].language) === 0) {
                     cleanr.activefilter = cleanr.list[i].filter;
                     lan = cleanr.list[i].language;
@@ -358,8 +360,8 @@ var cleanr = cleanr || {
                 }
             }, {once: true});
             let content = document.querySelector('div#infobox div');
-            let info = '<p>Using an userscript-managers like <em>Tampermonkey</em>, you can access a <b>settings dialog</b> for <em>Facebook Homefeed Cleanr</em> via a dropdown menu on the managers icon in the browser toolbar.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsGCTM')+'" />'
-                + '<p>In <em>Firefox</em> you can also access Facebook Homefeed Cleanr\'s <b>settings dialog</b> via the webpage\'s <em>context-menu</em> (right-click on the page).</p><p>If you are using <em>Greasemonkey 4</em>, the right-click context menu is the <em>only way</em> to access the settings dialog.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsFFGM')+'" />';
+            let info = '<p>Using an userscript-managers like <em>Tampermonkey</em>, you can access a <b>settings dialog</b> for <em>Facebook Homefeed Cleanr</em> via a dropdown menu on the managers icon in the browser toolbar.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsGCTM')+'" />' +
+                '<p>In <em>Firefox</em> you can also access Facebook Homefeed Cleanr\'s <b>settings dialog</b> via the webpage\'s <em>context-menu</em> (right-click on the page).</p><p>If you are using <em>Greasemonkey 4</em>, the right-click context menu is the <em>only way</em> to access the settings dialog.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsFFGM')+'" />';
             content.insertAdjacentHTML('beforeend', info);
             document.getElementById('infobox').style.display = 'block';
             GMC.setLocalStorageValue('infoShown',GMC.info.script.version.replace(/\./g,'').substring(0,8));
