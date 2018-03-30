@@ -3,7 +3,7 @@
 // @namespace   dk.rockland.userscript.facebook.cleanr
 // @description Cleaning up the homefeed on Facebook. Removes or highlights Suggested, sponsored and paid content in the homefeed.
 // @match       *://*.facebook.com/*
-// @version     2017.12.07.3
+// @version     2018.03.30.0
 // @author      Stig Nygaard, http://www.rockland.dk
 // @homepageURL http://www.rockland.dk/userscript/facebook/cleanr/
 // @supportURL  http://www.rockland.dk/userscript/facebook/cleanr/
@@ -11,9 +11,10 @@
 // @grant       GM_deleteValue
 // @grant       GM_registerMenuCommand
 // @grant       GM_getResourceURL
-// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=235553
+// @require     https://greasyfork.org/scripts/34527/code/GMCommonAPI.js?version=237580
 // @resource    imgSettingsGCTM https://greasyfork.org/system/screenshots/screenshots/000/008/955/original/FBCleanrGCTM.png
 // @resource    imgSettingsFFGM https://greasyfork.org/system/screenshots/screenshots/000/008/956/original/FBCleanrFFGM.png
+// @resource    imgSadSmiley https://i.pinimg.com/originals/e4/13/54/e4135406951feb9b6bd685ef019e8d06.png
 // @noframes
 // ==/UserScript==
 
@@ -56,6 +57,7 @@
 
 // CHANGELOG - The most important updates/versions:
 var changelog = [
+    {version: '2018.03.30.0', description: 'The End! Well, of life on Greasy Fork for this script at least (soon). I have realized I don\'t have the time or motivation to keep the script updated regularly.'},
     {version: '2017.12.07.1', description: 'Reverting to an older version of GMCommonAPI while investigating an error when running in Google Chrome.'},
     {version: '2017.11.05.2', description: 'Greasemonkey 4 compatibility. New Settings menu/dialog. Bug fixes. Moving development to GitHub repository.'},
     {version: '2016.10.18.0', description: 'Sepia/yellowish highlight filter (Works best with modern browsers) plus some fixes and extra configuration options.'},
@@ -223,20 +225,20 @@ var cleanr = cleanr || {
         document.forms['cleanrsettings'].querySelector('input:checked:enabled').focus();
     },
     loadSettings: function() {
-        if (typeof GM_getValue === 'function') { // TEMP! Moving old values to Local Storage
-            if (GM_getValue('debug','') !== '') {
-                GMC.setLocalStorageValue('debug', GM_getValue('debug',''));
-                GM_deleteValue('debug');
-            }
-            if (GM_getValue('mode','') !== '') {
-                GMC.setLocalStorageValue('mode', GM_getValue('mode',''));
-                GM_deleteValue('mode');
-            }
-            if (GM_getValue('method','') !== '') {
-                GMC.setLocalStorageValue('method', GM_getValue('method',''));
-                GM_deleteValue('method');
-            }
-        }
+        // if (typeof GM_getValue === 'function') { // TEMP! Moving old values to Local Storage
+        //     if (GM_getValue('debug','') !== '') {
+        //         GMC.setLocalStorageValue('debug', GM_getValue('debug',''));
+        //         GM_deleteValue('debug');
+        //     }
+        //     if (GM_getValue('mode','') !== '') {
+        //         GMC.setLocalStorageValue('mode', GM_getValue('mode',''));
+        //         GM_deleteValue('mode');
+        //     }
+        //     if (GM_getValue('method','') !== '') {
+        //         GMC.setLocalStorageValue('method', GM_getValue('method',''));
+        //         GM_deleteValue('method');
+        //     }
+        // }
 
         DEBUG = (''+GMC.getLocalStorageValue('debug', DEBUG)) === 'true';
         // Mode
@@ -346,8 +348,8 @@ var cleanr = cleanr || {
     },
     runOnce: function() {
         //GMC.setLocalStorageValue('infoShown',''); // To always show run-once info!!!
-        if (!GMC.getLocalStorageValue('infoShown',false)) {
-            let infobox = '<div id="infobox" style="position:fixed;left:0;right:0;top:5em;z-index:3000009;margin-left:auto;margin-right:auto;min-height:8em;width:40%;background-color:#fff;color:#111;border:3px rgb(66,103,178) solid;border-radius:5px;display:none;padding:1em"><em style="color:rgb(66,103,178)"><b>Stig\'s Facebook Homefeed Cleanr information</b> - This should only be shown once or twice...</em><div style="padding:1em 0 0 0"></div></div>';
+        if (!GMC.getLocalStorageValue('eolShown',false)) {
+            let infobox = '<div id="infobox" style="position:fixed;left:0;right:0;top:10em;z-index:3000009;margin-left:auto;margin-right:auto;min-height:8em;width:40%;background-color:#fff;color:#111;border:3px rgb(66,103,178) solid;border-radius:5px;display:none;padding:1em"><em style="color:rgb(66,103,178)"><b>Stig\'s Facebook Homefeed Cleanr information</b> - This should only be shown once or twice...</em><div style="padding:1em 0 0 0"></div></div>';
             document.body.insertAdjacentHTML('beforeend', infobox);
             document.getElementById('infobox').addEventListener('click', function () {
                 this.style.display = 'none';
@@ -360,11 +362,13 @@ var cleanr = cleanr || {
                 }
             }, {once: true});
             let content = document.querySelector('div#infobox div');
-            let info = '<p>Using an userscript-managers like <em>Tampermonkey</em>, you can access a <b>settings dialog</b> for <em>Facebook Homefeed Cleanr</em> via a dropdown menu on the managers icon in the browser toolbar.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsGCTM')+'" />' +
-                '<p>In <em>Firefox</em> you can also access Facebook Homefeed Cleanr\'s <b>settings dialog</b> via the webpage\'s <em>context-menu</em> (right-click on the page).</p><p>If you are using <em>Greasemonkey 4</em>, the right-click context menu is the <em>only way</em> to access the settings dialog.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsFFGM')+'" />';
+            // let info = '<p>Using an userscript-managers like <em>Tampermonkey</em>, you can access a <b>settings dialog</b> for <em>Facebook Homefeed Cleanr</em> via a dropdown menu on the managers icon in the browser toolbar.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsGCTM')+'" />' +
+            //     '<p>In <em>Firefox</em> you can also access Facebook Homefeed Cleanr\'s <b>settings dialog</b> via the webpage\'s <em>context-menu</em> (right-click on the page).</p><p>If you are using <em>Greasemonkey 4</em>, the right-click context menu is the <em>only way</em> to access the settings dialog.</p><img style="max-width:100%;width:auto;height:auto" src="'+GMC.getResourceURL('imgSettingsFFGM')+'" />';
+            let info =  '<img style="max-width:250px;width:auto;height:auto;display:block;float:right" src="'+GMC.getResourceURL('imgSadSmiley')+'" /><p><b>THE LAST "OFFICIAL" VERSION !</b></p><p>I plan to withdraw this userscript from Greasy Fork soon.</p><p>Even though it by number of installs is my most popular userscript, it is still the lowest prioritized for me personally, and I find it hard to find time and motivation to fix bugs and keep it updated -  not to mention ever reach my original goals for the feature-set of the script. So I have decided it is unfair to keep the script "promoted" on Greasy Fork.</p>' +
+                        '<p>I will continue to be using the script myself, and if you, despite slow or missing development and bug fixing, still want to use it, you should now <b><a href="https://github.com/StigNygaard/Stigs_Facebook_Homefeed_Cleanr"><em>re-install</em> it from GitHub</a></b> where I will continue to keep it hosted (and potentially occasionally updated).</p><p>The script currently has some issues, like occasionally forgetting settings (This is also why this info-screen might be shown more than the intended single time only). And at the time of writing this, the basic functionally of hiding sponsored posts actually also seems to be a bit unstable. Both are things I hope to fix some day, but the fix will only be posted on GitHub if/when ready.</p>';
             content.insertAdjacentHTML('beforeend', info);
             document.getElementById('infobox').style.display = 'block';
-            GMC.setLocalStorageValue('infoShown',GMC.info.script.version.replace(/\./g,'').substring(0,8));
+            GMC.setLocalStorageValue('eolShown',GMC.info.script.version.replace(/\./g,'').substring(0,8));
         }
     },
 
